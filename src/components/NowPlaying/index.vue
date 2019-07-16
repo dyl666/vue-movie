@@ -1,15 +1,15 @@
 <template>
   <div id="nowPlaying_container">
     <ul>
-      <li>
+      <li v-for="item in listData" :key="item.id">
         <div class="pic">
-          <img src="" alt="">
+          <img :src="item.img | setWH('64.90')" alt="">
         </div>
         <div class="list_con">
-          <h2 class="movie_name">无名之辈</h2>
-          <p class="grade">观众评分：<i>9.2</i></p>
-          <p class="star">主演：任素汐、陈建斌、潘斌龙</p>
-          <p class="note">今天55家影院放映607场</p>
+          <h2 class="movie_name">{{ item.nm }}</h2>
+          <p class="grade">观众评分：<i>{{ item.sc }}</i></p>
+          <p class="star es_">主演：{{ item.star }}</p>
+          <p class="note">{{ item.showInfo }}</p>
         </div>
         <div class="btn_con">
           <button>购票</button>
@@ -21,7 +21,24 @@
 
 <script>
 export default {
-  name: 'NowPlaying'
+  name: 'NowPlaying',
+  data () {
+    return {
+      listData: []
+    }
+  },
+  mounted () {
+    let url = '/api/movieOnInfoList?cityId=10';
+    this.$http.$get(url).then(
+      res => {
+        console.log(res);
+        if (res.msg === "ok") {
+          this.listData = res.data.movieList;
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+  }
 }
 </script>
 
@@ -38,17 +55,25 @@ export default {
       .pic {
         width: 64px;
         height: 90px;
-        background: pink;
+        background: #f5f5f5;
+        line-height: 7;
+        img {
+          border-radius: 3px;
+        }
       }
       .list_con {
         flex: 1;
         position: relative;
         margin-left: 10px;
+        width: 60%;
         .movie_name {
           font-weight: 800;
           color: #333;
           font-size: 18px;
           margin: 3px 0;
+        }
+        .star {
+          max-width: 95%;
         }
         p {
           font-size: 14px;

@@ -1,15 +1,15 @@
 <template>
   <div id="comingSoon_container">
     <ul>
-      <li>
+      <li v-for="item in listData" :key="item.id">
         <div class="pic">
-          <img src="" alt="">
+          <img :src=" item.img | setWH('64.90')" alt="">
         </div>
         <div class="list_con">
-          <h2 class="movie_name">无名之辈</h2>
-          <p class="grade">17098人想看</p>
-          <p class="star">主演：任素汐、陈建斌、潘斌龙</p>
-          <p class="note">2018-7-13上映</p>
+          <h2 class="movie_name">{{ item.nm }}</h2>
+          <p class="grade">{{ item.wish }}人想看</p>
+          <p class="star es_">主演：{{ item.star }}</p>
+          <p class="note">{{ item.rt }}上映</p>
         </div>
         <div class="btn_con">
           <button>预售</button>
@@ -21,7 +21,24 @@
 
 <script>
 export default {
-
+  name: 'ComingSoon',
+  data () {
+    return {
+      listData: []
+    }
+  },
+  mounted () {
+    let url = '/api/movieComingList?cityId=10';
+    this.$http.$get(url).then(
+      res => {
+        console.log(res);
+        if (res.msg === "ok") {
+          this.listData = res.data.comingList;
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+  }
 }
 </script>
 
@@ -38,7 +55,11 @@ export default {
       .pic {
         width: 64px;
         height: 90px;
-        background: pink;
+        background: #f5f5f5;
+        line-height: 7;
+        img {
+          border-radius: 3px;
+        }
       }
       .list_con {
         flex: 1;
@@ -49,6 +70,9 @@ export default {
           color: #333;
           font-size: 18px;
           margin: 3px 0;
+        }
+        .star {
+          max-width: 95%;
         }
         p {
           font-size: 14px;
