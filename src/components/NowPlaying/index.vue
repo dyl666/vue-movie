@@ -1,21 +1,25 @@
 <template>
   <div id="nowPlaying_container">
-    <ul>
-      <li v-for="item in listData" :key="item.id">
-        <div class="pic">
-          <img :src="item.img | setWH('64.90')" alt="">
-        </div>
-        <div class="list_con">
-          <h2 class="movie_name">{{ item.nm }}</h2>
-          <p class="grade">观众评分：<i>{{ item.sc }}</i></p>
-          <p class="star es_">主演：{{ item.star }}</p>
-          <p class="note">{{ item.showInfo }}</p>
-        </div>
-        <div class="btn_con">
-          <button>购票</button>
-        </div>
-      </li>
-    </ul>
+    <Loading v-if="isLoading" />
+    <Scroller :handleToPull='handleToPull' :handleTouchEnd=" handleTouchEnd">
+      <ul>
+        <li style="padding:0;border:0;display: block;text-align: center;">{{ refeshMsg }}</li>
+        <li v-for="item in listData" :key="item.id">
+          <div class="pic">
+            <img :src="item.img | setWH('64.90')" alt="">
+          </div>
+          <div class="list_con">
+            <h2 class="movie_name">{{ item.nm }}</h2>
+            <p class="grade">观众评分：<i>{{ item.sc }}</i></p>
+            <p class="star es_">主演：{{ item.star }}</p>
+            <p class="note">{{ item.showInfo }}</p>
+          </div>
+          <div class="btn_con">
+            <button>购票</button>
+          </div>
+        </li>
+      </ul>
+    </Scroller>
   </div>
 </template>
 
@@ -24,20 +28,46 @@ export default {
   name: 'NowPlaying',
   data () {
     return {
-      listData: []
+      listData: [],
+      refeshMsg: '',
+      isLoading: true
     }
   },
   mounted () {
-    let url = '/api/movieOnInfoList?cityId=10';
-    this.$http.$get(url).then(
-      res => {
-        console.log(res);
-        if (res.msg === "ok") {
-          this.listData = res.data.movieList;
-        }
-      }).catch(err => {
-        console.log(err)
-      })
+    this.getListData();
+  },
+  methods: {
+    // 进入详情
+    movieDetail () {
+      console.log('详情')
+    },
+    // 初始化数据
+    getListData (params = '') {
+      let url = '/api/movieOnInfoList?cityId=10';
+      this.$http.$get(url).then(
+        res => {
+          if (res.msg === "ok") {
+            this.listData = res.data.movieList;
+            this.isLoading = false;
+            if (params === 'refesh') {
+              this.refeshMsg = "更新成功";
+              setTimeout(() => {
+                this.refeshMsg = '';
+              }, 1000);
+            }
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+    },
+    // scroll 监听
+    handleToPull () {
+      this.refeshMsg = "正在更新";
+    },
+    // touchend 监听
+    handleTouchEnd () {
+      this.getListData('refesh')
+    }
   }
 }
 </script>
@@ -45,6 +75,8 @@ export default {
 <style scoped lang="less">
 #nowPlaying_container {
   padding: 0 15px;
+  width: 100%;
+  height: 100%;
   ul {
     li {
       display: flex;

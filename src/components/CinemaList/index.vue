@@ -1,19 +1,22 @@
 <template>
-  <div id="cinema_contianer" :style="{paddingTop:(cinemasListProps.length>0?'0':'44px'),paddingBottom:(cinemasListProps.length>0?'0':'50px')}">
-    <ul class="cinema_lists">
-      <li v-for="item in cinemasList" :key="item.id">
-        <h1>{{ item.nm}} <span>{{ item.sellPrice }}元起</span></h1>
-        <div class="address_con">
-          <p class="main">{{ item.addr }}</p>
-          <p class="distance">{{ item.distance }}</p>
-        </div>
-        <div class="card">
-          <span v-for="(card,key) in item.tag" :key="key">
-            <span v-if="card > 0 " class="con" :class="key | classCard">{{ key | cardFilter }}</span>
-          </span>
-        </div>
-      </li>
-    </ul>
+  <div id="cinema_contianer" :style="{paddingTop:(cinemasListProps.length>0?'0':''),paddingBottom:(cinemasListProps.length>0?'0':'')}">
+    <Loading v-if="isLoading" />
+    <Scroller :handleToPull='handleToPull' :handleTouchEnd="handleTouchEnd" ref="city_list">
+      <ul class="cinema_lists">
+        <li v-for="item in cinemasList" :key="item.id">
+          <h1>{{ item.nm}} <span>{{ item.sellPrice }}元起</span></h1>
+          <div class="address_con">
+            <p class="main">{{ item.addr }}</p>
+            <p class="distance">{{ item.distance }}</p>
+          </div>
+          <div class="card">
+            <span v-for="(card,key) in item.tag" :key="key">
+              <span v-if="card > 0 " class="con" :class="key | classCard">{{ key | cardFilter }}</span>
+            </span>
+          </div>
+        </li>
+      </ul>
+    </Scroller>
   </div>
 </template>
 
@@ -28,7 +31,8 @@ export default {
   },
   data () {
     return {
-      cinemasList: []
+      cinemasList: [],
+      isLoading: true
     }
   },
   mounted () {
@@ -36,16 +40,40 @@ export default {
       this.cinemasList = this.cinemasListProps;
       return;
     }
-    let url = '/api/cinemaList?cityId=10';
-    this.$http.$get(url).then(
-      res => {
-        console.log(res);
-        if (res.msg === "ok") {
-          this.cinemasList = res.data.cinemas;
-        }
-      }).catch(err => {
-        console.log(err)
-      })
+    this.getListData();
+  },
+  methods: {
+    // 进入详情
+    movieDetail () {
+      console.log('详情')
+    },
+    // 初始化数据
+    getListData (params = '') {
+      let url = '/api/cinemaList?cityId=10';
+      this.$http.$get(url).then(
+        res => {
+          if (res.msg === "ok") {
+            this.cinemasList = res.data.cinemas;
+            this.isLoading = false;
+            if (params === 'refesh') {
+              this.refeshMsg = "更新成功";
+              setTimeout(() => {
+                this.refeshMsg = '';
+              }, 1000);
+            }
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+    },
+    // scroll 监听
+    handleToPull () {
+      this.refeshMsg = "正在更新";
+    },
+    // touchend 监听
+    handleTouchEnd () {
+      this.getListData('refesh')
+    }
   },
   filters: {
     cardFilter: function (value) {
@@ -108,6 +136,8 @@ export default {
 
 <style scoped lang="less">
 #cinema_contianer {
+  width: 100%;
+  height: 100%;
   .cinema_lists {
     width: 100%;
     overflow: hidden;

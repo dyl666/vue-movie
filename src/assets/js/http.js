@@ -41,7 +41,7 @@ axios.interceptors.response.use(
                 // 只弹窗，不操作
                 console.log('失败1', response)
             } else if (returnCode >= 30000 && returnCode < 40000) {
-
+                console.log('returnCode---' + returnCode)
             }
         }
         return response;

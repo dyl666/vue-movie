@@ -1,49 +1,82 @@
 <template>
-  <div id="comingSoon_container">
-    <ul>
-      <li v-for="item in listData" :key="item.id">
-        <div class="pic">
-          <img :src=" item.img | setWH('64.90')" alt="">
-        </div>
-        <div class="list_con">
-          <h2 class="movie_name">{{ item.nm }}</h2>
-          <p class="grade">{{ item.wish }}人想看</p>
-          <p class="star es_">主演：{{ item.star }}</p>
-          <p class="note">{{ item.rt }}上映</p>
-        </div>
-        <div class="btn_con">
-          <button>预售</button>
-        </div>
-      </li>
-    </ul>
+  <div id="comingSoon_container" ref="comingSoon_container">
+    <Loading v-if="isLoading" />
+    <Scroller :handleToPull='handleToPull' :handleTouchEnd="handleTouchEnd">
+      <ul>
+        <li style="padding:0;border:0;display: block;text-align: center;">{{ refeshMsg }}</li>
+        <li v-for="item in listData" :key="item.id" @tap="movieDetail">
+          <div class="pic">
+            <img :src=" item.img | setWH('64.90')" alt="">
+          </div>
+          <div class="list_con">
+            <h2 class="movie_name">{{ item.nm }}</h2>
+            <p class="grade">{{ item.wish }}人想看</p>
+            <p class="star es_">主演：{{ item.star }}</p>
+            <p class="note">{{ item.rt }}上映</p>
+          </div>
+          <div class="btn_con">
+            <button>预售</button>
+          </div>
+        </li>
+      </ul>
+    </Scroller>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'ComingSoon',
   data () {
     return {
-      listData: []
+      listData: [],
+      refeshMsg: '',
+      isLoading: true
     }
   },
   mounted () {
-    let url = '/api/movieComingList?cityId=10';
-    this.$http.$get(url).then(
-      res => {
-        console.log(res);
-        if (res.msg === "ok") {
-          this.listData = res.data.comingList;
-        }
-      }).catch(err => {
-        console.log(err)
-      })
+    this.getListData();
+  },
+  methods: {
+    // 进入详情
+    movieDetail () {
+      console.log('详情')
+    },
+    // 初始化数据
+    getListData (params = '') {
+      let url = '/api/movieComingList?cityId=10';
+      this.$http.$get(url).then(
+        res => {
+          if (res.msg === "ok") {
+            this.listData = res.data.comingList;
+            this.isLoading = false;
+            if (params === 'refesh') {
+              this.refeshMsg = "更新成功";
+              setTimeout(() => {
+                this.refeshMsg = '';
+              }, 1000);
+            }
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+    },
+    // scroll 监听
+    handleToPull () {
+      this.refeshMsg = "正在更新";
+    },
+    // touchend 监听
+    handleTouchEnd () {
+      this.getListData('refesh')
+    }
   }
 }
 </script>
 
 <style scoped lang="less">
 #comingSoon_container {
+  width: 100%;
+  height: 100%;
   padding: 0 15px;
   ul {
     li {

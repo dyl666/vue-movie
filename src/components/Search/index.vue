@@ -1,38 +1,42 @@
 <template>
   <div id="search_container">
     <div class="search_input">
-      <input type="text" v-model="keyword">
+      <i class="iconfont icon-sousuo"></i>
+      <input type="text" v-model="keyword" placeholder="请输入关键字">
     </div>
 
-    <!-- 电影/电视剧/综艺 -->
-    <div class="search_lists" v-if="moviesList.length>0">
-      <h2 class="title">电影/电视剧/综艺</h2>
-      <ul>
-        <li v-for="item in moviesList" :key="item.id">
-          <div class="pic">
-            <img :src="item.img |setWH('64.90') " alt="">
-          </div>
-          <div class="list_con">
-            <h2 class="movie_name">{{ item.nm }}</h2>
-            <p class="grade">{{ item.enm }}</p>
-            <p class="star es_">{{ item.cat }}</p>
-            <p class="note">{{ item.rt }}</p>
-          </div>
-          <div class="btn_con">
-            <span>{{ item.sc }}</span>
-          </div>
-        </li>
-      </ul>
-    </div>
+    <Scroller :handleToPull='handleToPull' :handleTouchEnd="handleTouchEnd" ref="city_list">
+      <div style="paddingTop:50px">
+        <!-- 电影/电视剧/综艺 -->
+        <div class="search_lists" v-if="moviesList.length>0">
+          <h2 class="title">电影/电视剧/综艺</h2>
+          <ul>
+            <li v-for="item in moviesList" :key="item.id">
+              <div class="pic">
+                <img :src="item.img |setWH('64.90') " alt="">
+              </div>
+              <div class="list_con">
+                <h2 class="movie_name">{{ item.nm }}</h2>
+                <p class="grade">{{ item.enm }}</p>
+                <p class="star es_">{{ item.cat }}</p>
+                <p class="note">{{ item.rt }}</p>
+              </div>
+              <div class="btn_con">
+                <span>{{ item.sc }}</span>
+              </div>
+            </li>
+          </ul>
+        </div>
 
-    <div style="width:100%;height:10px;background:#f5f5f5"></div>
+        <!-- 影院 -->
+        <div class="search_lists" v-if="cinemasList.length>0">
+          <div style="width:100%;height:10px;background:#f5f5f5"></div>
+          <h2 class="title">影院</h2>
+          <CinemaList :cinemasListProps="cinemasList" />
+        </div>
 
-    <!-- 影院 -->
-    <div class="search_lists" v-if="cinemasList.length>0">
-      <h2 class="title">影院</h2>
-      <CinemaList :cinemasListProps="cinemasList" />
-    </div>
-
+      </div>
+    </Scroller>
   </div>
 </template>
 
@@ -60,6 +64,18 @@ export default {
       if (typeof this.source === "function") {
         this.source('终止请求')
       }
+    },
+    // 进入详情
+    movieDetail () {
+      console.log('详情')
+    },
+    // scroll 监听
+    handleToPull () {
+      // this.refeshMsg = "正在更新";
+    },
+    // touchend 监听
+    handleTouchEnd () {
+      // this.getListData('refesh')
     }
   },
   watch: {
@@ -98,15 +114,28 @@ export default {
 
 <style scoped lang="less">
 #search_container {
+  width: 100%;
+  height: 100%;
   .search_input {
     background: #f5f5f5;
     padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    height: 50px;
+    z-index: 999;
+    i {
+      position: absolute;
+      left: 16px;
+      top: 34%;
+      /* bottom: 50%; */
+      margin: auto;
+    }
     input {
       width: 95%;
       display: block;
       background: #fff;
       border-radius: 3px;
-      padding: 8px 6px;
+      padding: 8px 7%;
       margin: 0 auto;
     }
   }

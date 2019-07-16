@@ -43,54 +43,55 @@ export default {
 </script>
 
 <style scoped lang="less">
-.content {
-  position: relative;
-  padding-top: 88px;
-  padding-bottom: 50px;
-  .movie_menu .router-link-active {
-    border-bottom: 2px solid red;
-    color: red;
-    p {
+#movie_container {
+  width: 100%;
+  height: 100%;
+  .content {
+    .movie_menu .router-link-active {
+      border-bottom: 2px solid red;
       color: red;
-    }
-  }
-  .movie_menu {
-    background: #fff;
-    z-index: 999;
-    position: fixed;
-    top: 44px;
-    left: 0;
-    width: 100%;
-    height: 44px;
-    line-height: 44px;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid #f1f1f1;
-    padding: 0 15px;
-    .menu_city {
-      i {
-        float: right;
-        margin-top: 2px;
-        font-size: 12px;
-      }
-    }
-    .menu_search {
       p {
-        font-size: 20px;
+        color: red;
       }
     }
-    p {
-      font-size: 15px;
-      color: #333;
-      font-weight: 700;
-    }
-    .menu_hot {
+    .movie_menu {
+      background: #fff;
+      z-index: 999;
+      position: fixed;
+      top: 44px;
+      left: 0;
+      width: 100%;
+      height: 44px;
+      line-height: 44px;
       display: flex;
       justify-content: space-between;
+      border-bottom: 1px solid #f1f1f1;
+      padding: 0 15px;
+      .menu_city {
+        i {
+          float: right;
+          margin-top: 2px;
+          font-size: 12px;
+        }
+      }
+      .menu_search {
+        p {
+          font-size: 20px;
+        }
+      }
       p {
-        width: 80px;
-        text-align: center;
-        margin: 0 12px;
+        font-size: 15px;
+        color: #333;
+        font-weight: 700;
+      }
+      .menu_hot {
+        display: flex;
+        justify-content: space-between;
+        p {
+          width: 80px;
+          text-align: center;
+          margin: 0 12px;
+        }
       }
     }
   }

@@ -27,3 +27,12 @@ i {
     white-space: nowrap;
     /*规定段落中的文本不进行换行 */
 }
+
+/* 内容部分 */
+.content {
+    position: relative;
+    padding-top: 88px;
+    padding-bottom: 50px;
+    width: 100%;
+    height: 100%;
+}
