@@ -8,7 +8,7 @@
     <div class="content">
       <div class="movie_menu">
         <router-link tag="div" to="/movie/city" class="menu_city">
-          <p>杭州<i class="iconfont icon-sanjiao_xia"></i></p>
+          <p>{{$store.state.city.nm}}<i class="iconfont icon-sanjiao_xia"></i></p>
         </router-link>
         <div class="menu_hot">
           <router-link tag="p" to="/movie/nowPlaying">正在热映</router-link>

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './routers'//引入router   
+import store from './stores'
 
 
 // axios http 请求
@@ -26,5 +27,6 @@ Vue.component('Loading', Loading);
 
 new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app')

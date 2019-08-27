@@ -62,5 +62,8 @@ export default {
 .wrapper {
   width: 100%;
   height: 100%;
+  ul {
+    // padding-bottom: 44px;
+  }
 }
 </style>

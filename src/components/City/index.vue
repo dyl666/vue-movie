@@ -41,6 +41,16 @@ export default {
     }
   },
   mounted () {
+    var cityList = window.localStorage.getItem('cityList');
+    var hotList = window.localStorage.getItem('hotList');
+    if (cityList && hotList) {
+      this.cityList = JSON.parse(cityList);
+      this.hotList = JSON.parse(hotList);
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 500);
+      return;
+    }
     this.getListData();
   },
   methods: {
@@ -60,6 +70,8 @@ export default {
             var { cityList, hotList } = this.formatCityList(cities);
             this.cityList = cityList;
             this.hotList = hotList;
+            window.localStorage.setItem('cityList', JSON.stringify(cityList));
+            window.localStorage.setItem('hotList', JSON.stringify(hotList));
             this.isLoading = false;
             if (params === 'refesh') {
               this.refeshMsg = "更新成功";
