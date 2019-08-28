@@ -1,8 +1,8 @@
 
 
 const state = {
-    nm: '北京',
-    id: 1
+    nm: window.localStorage.getItem('nowCityNm') || '北京',
+    id: window.localStorage.getItem('nowCityId') || 1
 }
 
 const actions = {
@@ -10,7 +10,7 @@ const actions = {
 }
 
 const mutations = {
-    CITY_INFO (state, payload) {
+    CITY_INFO (state, payload) { 
         state.nm = payload.nm;
         state.id = payload.id;
     }

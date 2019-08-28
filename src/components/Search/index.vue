@@ -1,5 +1,6 @@
 <template>
   <div id="search_container">
+    <Loading v-if="isLoading" />
     <div class="search_input">
       <i class="iconfont icon-sousuo"></i>
       <input type="text" v-model="keyword" placeholder="请输入关键字">
@@ -7,6 +8,7 @@
 
     <Scroller :handleToPull='handleToPull' :handleTouchEnd="handleTouchEnd" ref="city_list">
       <div style="paddingTop:50px">
+        <p v-if="moviesList.length == 0 && cinemasList.length == 0" style="text-align:center;font-size:13px;color:#999;padding:15px 0;">暂无数据</p>
         <!-- 电影/电视剧/综艺 -->
         <div class="search_lists" v-if="moviesList.length>0">
           <h2 class="title">电影/电视剧/综艺</h2>
@@ -27,7 +29,6 @@
             </li>
           </ul>
         </div>
-
         <!-- 影院 -->
         <div class="search_lists" v-if="cinemasList.length>0">
           <div style="width:100%;height:10px;background:#f5f5f5"></div>
@@ -37,6 +38,7 @@
 
       </div>
     </Scroller>
+
   </div>
 </template>
 
@@ -51,6 +53,7 @@ export default {
   },
   data () {
     return {
+      isLoading: false,
       keyword: '',
       cinemasList: [],
       moviesList: []
@@ -82,8 +85,10 @@ export default {
     keyword (value) {
       if (!value) { return; }
       this.cancelRequest();
-      let url = '/api/searchList?cityId=10&kw=' + value;
+      var cityId = this.$store.state.city.id;
+      let url = '/api/searchList?cityId=' + cityId + '&kw=' + value;
       var that = this;
+      this.isLoading = true;
       axios.get(url, {
         cancelToken: new axios.CancelToken(function executor (c) {
           that.source = c;
@@ -92,12 +97,20 @@ export default {
       }).then(
         res => {
           console.log(res)
-          if (res.data.msg === "ok" && res.data.data.movies) {
-            this.moviesList = res.data.data.movies.list;
+          if (res.data.msg === "ok") {
+            this.isLoading = false;
+            if (res.data.data.movies) {
+              this.moviesList = res.data.data.movies.list;
+            } else {
+              this.moviesList = [];
+            }
+            if (res.data.data.cinemas) {
+              this.cinemasList = res.data.data.cinemas.list;
+            } else {
+              this.cinemasList = [];
+            }
           }
-          if (res.data.msg === "ok" && res.data.data.cinemas) {
-            this.cinemasList = res.data.data.cinemas.list;
-          }
+
         }).catch(err => {
           if (axios.isCancel(err)) {
             console.log('Request canceled', err.message); // 请求如果被取消，返回取消的message
@@ -167,6 +180,7 @@ export default {
           flex: 1;
           position: relative;
           margin-left: 10px;
+          max-width: 71%;
           .movie_name {
             font-weight: 800;
             color: #333;

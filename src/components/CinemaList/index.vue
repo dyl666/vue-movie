@@ -32,12 +32,14 @@ export default {
   data () {
     return {
       cinemasList: [],
-      isLoading: true
+      isLoading: true,
+      prevCityId: -1
     }
   },
   mounted () {
     if (this.cinemasListProps.length > 0) {
       this.cinemasList = this.cinemasListProps;
+      this.isLoading = false;
       return;
     }
     this.getListData();
@@ -49,23 +51,31 @@ export default {
     },
     // 初始化数据
     getListData (params = '') {
-      let url = '/api/cinemaList?cityId=10';
+      var cityId = this.$store.state.city.id;
+      if (this.prevCityId === cityId) { this.refeshAnimate(params); return; }
+      this.isLoading = true;
+      let url = '/api/cinemaList?cityId=' + cityId;
       this.$http.$get(url).then(
         res => {
           if (res.msg === "ok") {
             this.cinemasList = res.data.cinemas;
             this.isLoading = false;
-            if (params === 'refesh') {
-              this.refeshMsg = "更新成功";
-              setTimeout(() => {
-                this.refeshMsg = '';
-              }, 1000);
-            }
+            this.prevCityId = cityId;
+            this.refeshAnimate(params);
           }
         }).catch(err => {
           console.log(err)
         })
     },
+    refeshAnimate (params) {
+      if (params === 'refesh') {
+        this.refeshMsg = "更新成功";
+        setTimeout(() => {
+          this.refeshMsg = '';
+        }, 1000);
+      }
+    },
+
     // scroll 监听
     handleToPull () {
       this.refeshMsg = "正在更新";

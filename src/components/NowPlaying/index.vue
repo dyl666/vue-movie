@@ -30,10 +30,11 @@ export default {
     return {
       listData: [],
       refeshMsg: '',
-      isLoading: true
+      isLoading: true,
+      prevCityId: -1
     }
   },
-  mounted () {
+  activated () {
     this.getListData();
   },
   methods: {
@@ -43,23 +44,31 @@ export default {
     },
     // 初始化数据
     getListData (params = '') {
-      let url = '/api/movieOnInfoList?cityId=10';
+      var cityId = this.$store.state.city.id;
+      if (this.prevCityId === cityId) { this.refeshAnimate(params); return; }
+      this.isLoading = true;
+      let url = '/api/movieOnInfoList?cityId=' + cityId;
       this.$http.$get(url).then(
         res => {
           if (res.msg === "ok") {
             this.listData = res.data.movieList;
             this.isLoading = false;
-            if (params === 'refesh') {
-              this.refeshMsg = "更新成功";
-              setTimeout(() => {
-                this.refeshMsg = '';
-              }, 1000);
-            }
+            this.prevCityId = cityId;
+            this.refeshAnimate(params)
           }
         }).catch(err => {
           console.log(err)
         })
     },
+    refeshAnimate (params) {
+      if (params === 'refesh') {
+        this.refeshMsg = "更新成功";
+        setTimeout(() => {
+          this.refeshMsg = '';
+        }, 1000);
+      }
+    },
+
     // scroll 监听
     handleToPull () {
       this.refeshMsg = "正在更新";
@@ -98,6 +107,7 @@ export default {
         position: relative;
         margin-left: 10px;
         width: 60%;
+        max-width: 71%;
         .movie_name {
           font-weight: 800;
           color: #333;

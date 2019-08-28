@@ -32,7 +32,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         console.log('请求拦截返回参数', response)
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 0) {
             // 成功
             let returnCode = response.data.code
             if (returnCode > 10000 && returnCode < 20000) {
