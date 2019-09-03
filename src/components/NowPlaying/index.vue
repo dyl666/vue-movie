@@ -6,10 +6,10 @@
         <li style="padding:0;border:0;display: block;text-align: center;">{{ refeshMsg }}</li>
         <li v-for="item in listData" :key="item.id">
           <div class="pic">
-            <img :src="item.img | setWH('64.90')" alt="">
+            <img :src="item.img | setWH('64.90')" alt="" @tap="detailGo(item.id)">
           </div>
           <div class="list_con">
-            <h2 class="movie_name">{{ item.nm }}</h2>
+            <h2 class="movie_name" @tap="detailGo(item.id)">{{ item.nm }}</h2>
             <p class="grade">观众评分：<i>{{ item.sc }}</i></p>
             <p class="star es_">主演：{{ item.star }}</p>
             <p class="note">{{ item.showInfo }}</p>
@@ -39,8 +39,8 @@ export default {
   },
   methods: {
     // 进入详情
-    movieDetail () {
-      console.log('详情')
+    detailGo (movieId) {
+      this.$router.push('/movie/detail/1/' + movieId);
     },
     // 初始化数据
     getListData (params = '') {
@@ -86,6 +86,7 @@ export default {
   padding: 0 15px;
   width: 100%;
   height: 100%;
+  padding-top: 44px;
   ul {
     li {
       display: flex;

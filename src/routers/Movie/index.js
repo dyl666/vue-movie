@@ -23,6 +23,26 @@ export default {
             component: () => import('@/components/Search')
         },
         {
+            path: 'detail/1/:movieId',
+            components: {
+                default: () => import('@/components/NowPlaying'),
+                detail: () => import('@/views/Movie/detail')
+            },
+            props: { // 组件传参
+                detail: true
+            }
+        },
+        {
+            path: 'detail/2/:movieId',
+            components: {
+                default: () => import('@/components/ComingSoon'),
+                detail: () => import('@/views/Movie/detail')
+            },
+            props: { // 组件传参
+                detail: true
+            }
+        },
+        {
             path: '/movie',
             redirect: '/movie/nowPlaying'
         },

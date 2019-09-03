@@ -27,7 +27,7 @@ export default {
 
 <style scoped lang="less">
 #tabbar_content {
-  position: fixed;
+  position: absolute;
   z-index: 999;
   bottom: 0;
   left: 0;

@@ -31,7 +31,7 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
     response => {
-        console.log('请求拦截返回参数', response)
+        // console.log('请求拦截返回参数', response)
         if (response.status === 200) {
             // 成功
             let returnCode = response.data.code

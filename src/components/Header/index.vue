@@ -1,5 +1,6 @@
 <template>
   <div id="header_content">
+    <slot></slot>
     <h2>{{title}}</h2>
   </div>
 </template>
@@ -16,8 +17,8 @@ export default {
 </script>
 
 <style scoped lang="less">
-#header_content {
-  position: fixed;
+#header_content { 
+  position: absolute;
   z-index: 999;
   top: 0;
   left: 0;

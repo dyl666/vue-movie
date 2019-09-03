@@ -12,7 +12,12 @@ Vue.prototype.$http = Http;
 Vue.config.productionTip = false;
 
 
-Vue.filter('setWH', (url, arg) => {
+Vue.filter('setWH', (url, arg) => {  
+  return url.replace(/w\.h/, arg);
+})
+
+Vue.filter('setWH1', (url, arg) => { 
+  console.log(url)
   return url.replace(/w\.h/, arg);
 })
 

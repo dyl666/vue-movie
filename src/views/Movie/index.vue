@@ -1,32 +1,36 @@
 <template>
   <div id="movie_container">
+ 
+      <!-- 头部 -->
+      <Header title="电影" />
 
-    <!-- 头部 -->
-    <Header title="电影" />
-
-    <!-- 内容 -->
-    <div class="content">
-      <div class="movie_menu">
-        <router-link tag="div" to="/movie/city" class="menu_city">
-          <p>{{$store.state.city.nm}}<i class="iconfont icon-sanjiao_xia"></i></p>
-        </router-link>
-        <div class="menu_hot">
-          <router-link tag="p" to="/movie/nowPlaying">正在热映</router-link>
-          <router-link tag="p" to="/movie/comingSoon">即将上映</router-link>
+      <!-- 内容 -->
+      <div class="content">
+        <div class="movie_menu">
+          <router-link tag="div" to="/movie/city" class="menu_city">
+            <p>{{$store.state.city.nm}}<i class="iconfont icon-sanjiao_xia"></i></p>
+          </router-link>
+          <div class="menu_hot">
+            <router-link tag="p" to="/movie/nowPlaying">正在热映</router-link>
+            <router-link tag="p" to="/movie/comingSoon">即将上映</router-link>
+          </div>
+          <router-link tag="div" to="/movie/search" class="menu_search">
+            <p class="iconfont icon-sousuo"></p>
+          </router-link>
         </div>
-        <router-link tag="div" to="/movie/search" class="menu_search">
-          <p class="iconfont icon-sousuo"></p>
-        </router-link>
-      </div>
 
-      <keep-alive>
-        <router-view />
-      </keep-alive>
+        <keep-alive>
+          <router-view />
+        </keep-alive>
+ 
 
+      <!-- 底部 -->
+      <Tabbar />
     </div>
 
-    <!-- 底部 -->
-    <Tabbar />
+    <!-- 详情 -->
+    <router-view name="detail" />
+
   </div>
 </template>
 
@@ -78,7 +82,12 @@ export default {
 #movie_container {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   .content {
+    flex: 1;
+    // touch-action: none;
     .movie_menu .router-link-active {
       border-bottom: 2px solid red;
       color: red;
@@ -89,7 +98,7 @@ export default {
     .movie_menu {
       background: #fff;
       z-index: 999;
-      position: fixed;
+      position: absolute;
       top: 44px;
       left: 0;
       width: 100%;

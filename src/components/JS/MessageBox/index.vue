@@ -28,7 +28,7 @@ export default {
   top: 0;
   bottom: 0;
   margin: auto;
-  z-index: 999;
+  z-index: 99;
 }
 #message-box .con {
   width: 60%;
