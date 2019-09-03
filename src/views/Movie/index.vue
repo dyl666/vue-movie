@@ -33,10 +33,42 @@
 <script>
 import Header from '@/components/Header'
 import Tabbar from '@/components/TabBar'
+import { messageBox } from '@/components/JS'
 export default {
+  name: 'Movie',
   components: {
     Header,
-    Tabbar
+    Tabbar,
+  },
+  mounted () {
+
+    // 获取定位
+    let url = '/api/getLocation';
+    this.$http.$get(url).then(
+      res => {
+        var nowCityId = res.data.id;
+        if (this.$store.state.city.id == nowCityId) { return; }
+        if (res.msg === "ok") {
+          messageBox({
+            title: '当前定位',
+            con: res.data.nm,
+            cancel: '取消',
+            ok: '切换',
+            cancelDone () {
+              console.log('cancel click')
+            },
+            okDone () {
+              window.localStorage.setItem('nowCityNm', res.data.nm)
+              window.localStorage.setItem('nowCityId', res.data.id)
+              window.location.reload();
+            },
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
+
+
   }
 
 }
