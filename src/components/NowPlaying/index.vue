@@ -24,6 +24,8 @@
 </template>
 
 <script>
+// import $ from '@/assets/js/jq.js'
+import $ from 'jquery'
 export default {
   name: 'NowPlaying',
   data () {
@@ -44,21 +46,44 @@ export default {
     },
     // 初始化数据
     getListData (params = '') {
+
       var cityId = this.$store.state.city.id;
       if (this.prevCityId === cityId) { this.refeshAnimate(params); return; }
       this.isLoading = true;
-      let url = '/api/movieOnInfoList?cityId=' + cityId;
-      this.$http.$get(url).then(
-        res => {
-          if (res.msg === "ok") {
-            this.listData = res.data.movieList;
-            this.isLoading = false;
-            this.prevCityId = cityId;
-            this.refeshAnimate(params)
+      let url = '/api/movieOnInfoList?cityId=' + 100;
+
+      try {
+        $.ajax({
+          url: url,
+          context: document.body,
+          success: (res) => {
+            console.log(res)
+            if (res.msg === "ok") {
+              this.listData = res.data.movieList;
+              this.isLoading = false;
+              this.prevCityId = cityId;
+              this.refeshAnimate(params)
+            }
+          },
+          error: function (error) {
+            console.log(error)
           }
-        }).catch(err => {
-          console.log(err)
-        })
+        });
+      } catch (error) {
+        console.log(error)
+      }
+
+      // this.$http.$get(url).then(
+      //   res => {
+      //     if (res.msg === "ok") {
+      //       this.listData = res.data.movieList;
+      //       this.isLoading = false;
+      //       this.prevCityId = cityId;
+      //       this.refeshAnimate(params)
+      //     }
+      //   }).catch(err => {
+      //     console.log(err)
+      //   })
     },
     refeshAnimate (params) {
       if (params === 'refesh') {

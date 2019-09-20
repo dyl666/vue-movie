@@ -7,8 +7,7 @@ import cinemaRouter from './Cinema'
 Vue.use(Router)
 
 export default new Router({
-    mode: 'history',
-    base: process.env.BASE_URL,
+    // mode: 'history', 
     routes: [
         movieRouter,
         mineRouter,

@@ -21,6 +21,7 @@ axios.interceptors.request.use(
             }
             config.data = Qs.stringify(config.data)
         }
+        console.log(config)
         return config
     },
     err => {
@@ -44,6 +45,7 @@ axios.interceptors.response.use(
                 console.log('returnCode---' + returnCode)
             }
         }
+        console.log(response)
         return response;
     },
     err => {

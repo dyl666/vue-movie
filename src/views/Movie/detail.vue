@@ -6,10 +6,10 @@
     <!-- <Scroller> -->
     <div class="movie-content content">
       <div class="mv-top">
-        <div class="bj"></div>
+        <div class="bj" v-if="detailMovieData.img" :style="{'background-image':'url('+detailMovieData.img.replace(/w\.h/,'128.208')+')'}"></div>
         <div class="con">
           <div class="left">
-            <img v-if="detailMovieData.img" :src="detailMovieData.img | setWH1('128.150')" alt="">
+            <img v-if="detailMovieData.img" :src="detailMovieData.img | setWH1('128.208')" alt="">
           </div>
           <div class="right">
             <h2>{{ detailMovieData.nm }}</h2>
@@ -120,7 +120,7 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; 
+  justify-content: space-between;
   .movie-content {
     width: 100%;
     height: 100%;
@@ -142,14 +142,16 @@ export default {
         left: 0;
         width: 100%;
         z-index: -1;
+        transform: scale(1.5);
       }
       .con {
         display: flex;
         padding: 15px;
+        width: 100%;
+        min-height: 210px;
         .left {
           width: 128px;
-          min-height: 160px;
-          height: auto;
+          height: 180px; 
           img {
             width: 100%;
             height: 100%;
